@@ -6,9 +6,10 @@ from pathlib import Path
 from scipy.stats import probplot
 import os
 
-dataset_path = Path("F:\MyProjects\internet service provider churn prediction\internet_service_churn.csv")
+project_dir = os.path.dirname(os.path.abspath(__file__))
+dataset_path = Path(project_dir) / "dataset/internet_service_churn.csv"
 df = pd.read_csv(dataset_path)
-visualization_path = Path("F:\MyProjects\internet service provider churn prediction/visualizations")
+visualization_path = Path(project_dir) / "visualizations"
 
 ## Overview of dataset
 print(df.head(5))
