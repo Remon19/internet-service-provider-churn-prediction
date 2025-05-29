@@ -8,8 +8,10 @@ import os
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 dataset_path = Path(project_dir) / "dataset/internet_service_churn.csv"
-df = pd.read_csv(dataset_path)
 visualization_path = Path(project_dir) / "visualizations"
+
+## Read dataset
+df = pd.read_csv(dataset_path)
 
 ## Overview of dataset
 print(df.head(5))
@@ -63,17 +65,20 @@ real_numerical_features = list(df.select_dtypes("float64"))
 discrete_numerical_features = [feature for feature in numerical_features if feature in list(df.select_dtypes("int64"))]
 # print("Discrete Numerial Features: ", ", ".join(discrete_numerical_features))
 
-df[numerical_features].hist(bins=30, figsize=(12, 6))
+df[numerical_features].hist(bins=30, figsize=(12, 6), density=True)
 plt.tight_layout()
 plt.savefig(Path(visualization_path) / "histogram_plot_num_features.png")
 # plt.show()
 
-## Imputing Mising Values
-fill_values = df[real_numerical_features].mean(axis=0).to_dict()
-other_fill_values = {k:v[0] for k, v in df[discrete_numerical_features].mode(axis=0).to_dict().items()}
-fill_values.update(other_fill_values)
-# print(fill_values)
-df.fillna(fill_values,  inplace=True)
-print(df.info())
+## Counting the churn values
+churn_counts = df['churn'].value_counts()
+print("Churn Counts:\n", churn_counts)
+plt.figure()
+churn_counts.plot(kind='bar')
+plt.ylabel("Count of each class")
+plt.xlabel("Churn")
+plt.title("Churn Values Count")
+plt.tight_layout()
+plt.savefig(Path(visualization_path) / "churn_imbalnce.png")
 
 
