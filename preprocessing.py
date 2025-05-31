@@ -65,7 +65,7 @@ test_xy = np.c_[X_test, y_test]
 
 new_columns = preprocessr.get_feature_names_out().tolist()
 new_columns.append("churn")
-## Saving processed data as a parquet file
+## Saving processed data as a csv file
 train_data = pd.DataFrame(train_xy, columns=new_columns)
 test_data = pd.DataFrame(test_xy, columns=new_columns)
 train_data.to_csv(Path(project_dir) / "dataset/processed_train.csv", header=True, index=False)
