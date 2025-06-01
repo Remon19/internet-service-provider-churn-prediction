@@ -23,7 +23,7 @@ y_test = df_test["churn"]
 
 logr= LogisticRegression(random_state=42)
 knn = KNeighborsClassifier(n_neighbors=3)
-dt = DecisionTreeClassifier(max_depth=5, random_state=42)
+dt = DecisionTreeClassifier(random_state=42)
 
 logr.fit(X_train, y_train)
 knn.fit(X_train, y_train)
