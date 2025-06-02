@@ -23,8 +23,10 @@ y_train = df_train["churn"]
 X_test = df_test.drop(columns="churn")
 y_test = df_test["churn"]
 
+## Decision Tree classifier 
 dt = DecisionTreeClassifier(random_state=42)
 
+## Grid Search hyperparameter tuning
 search_params = {
     "max_depth" : [None, 3, 5, 7, 10],
     "max_features": ["sqrt", "log2"],
@@ -35,6 +37,7 @@ gridsearch_dt = GridSearchCV(dt, search_params, scoring="accuracy", cv=5)
 gridsearch_dt.fit(X_train, y_train)
 print(gridsearch_dt.best_params_)
 
+## Random Search hyperparameter tuning
 search_params = {
     "max_depth" : [None, 3, 5, 7, 10],
     "max_features": ["sqrt", "log2"],
@@ -45,6 +48,8 @@ randsearch_dt = RandomizedSearchCV(dt, search_params, scoring="accuracy", cv=5)
 randsearch_dt.fit(X_train, y_train)
 print(randsearch_dt.best_params_)
 
+
+## Bayesian Optimizaion hyperparameter tuning  
 def objective(trial):
     
     params = {
@@ -65,6 +70,8 @@ print(study.best_params)
 print(study.best_value)
 bayesoptimizd_dt = DecisionTreeClassifier(**study.best_params)
 bayesoptimizd_dt.fit(X_train, y_train)
+
+## Results after hyperparameter tuning
 results = {
     "Grid Search": get_classifier_results(y_test, X_test, gridsearch_dt),
     "Random Search": get_classifier_results(y_test, X_test, randsearch_dt),

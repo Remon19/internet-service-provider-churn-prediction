@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
 from sklearn.metrics import roc_auc_score, accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 from pathlib import Path
 from utils import get_classifier_results
@@ -24,16 +25,19 @@ y_test = df_test["churn"]
 logr= LogisticRegression(random_state=42)
 knn = KNeighborsClassifier(n_neighbors=3)
 dt = DecisionTreeClassifier(random_state=42)
+svc = SVC(random_state=42)
 
 logr.fit(X_train, y_train)
 knn.fit(X_train, y_train)
 dt.fit(X_train, y_train)
+svc.fit(X_train, y_train)
 
 
 results = {
     "logistic regression": get_classifier_results(y_test, X_test, logr),
     "KNN(n=3)" : get_classifier_results(y_test, X_test, knn),
-    "Decision Tree": get_classifier_results(y_test, X_test, dt)
+    "SVM Classifier": get_classifier_results(y_test, X_test, svc),
+    "Decision Tree": get_classifier_results(y_test, X_test, dt),
 }
 
 
