@@ -1,13 +1,10 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
-from sklearn.metrics import roc_auc_score, accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 from pathlib import Path
-from utils import get_classifier_results
+from utils import get_classifier_results, show_results
 import os
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
@@ -40,16 +37,5 @@ results = {
     "Decision Tree": get_classifier_results(y_test, X_test, dt),
 }
 
-
-for model, result in results.items():
-    cm_disp = ConfusionMatrixDisplay(result["confusion matrix"], display_labels=["Not Churn","Churn"])
-    print(f"""{model} results:
-          ROC-AUC Score: {result["roc-auc score"]:0.4f}
-          Accuracy: {result["accuracy"]:0.4f}
-          Classification Report: {result["classification_report"]}
-          """)
-    cm_disp.plot(cmap="coolwarm")
-    plt.title(f"Confusion Matrix for {model}")
-    plt.savefig(Path(visualization_path) / f"cm_plot_{model}")
-    # plt.show()
+show_results(results, save_fig=True, save_dir=visualization_path)
 

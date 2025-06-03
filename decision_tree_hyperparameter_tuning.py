@@ -1,13 +1,10 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from sklearn.metrics import ConfusionMatrixDisplay
 from pathlib import Path
 import os
-from utils import get_classifier_results
+from utils import get_classifier_results, show_results
 import optuna
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
@@ -48,7 +45,6 @@ randsearch_dt = RandomizedSearchCV(dt, search_params, scoring="accuracy", cv=5)
 randsearch_dt.fit(X_train, y_train)
 print(randsearch_dt.best_params_)
 
-
 ## Bayesian Optimizaion hyperparameter tuning  
 def objective(trial):
     
@@ -78,13 +74,4 @@ results = {
     "Bayesian Optimization": get_classifier_results(y_test, X_test, bayesoptimizd_dt)
 }
 
-for model, result in results.items():
-    cm_disp = ConfusionMatrixDisplay(result["confusion matrix"], display_labels=["Not Churn","Churn"])
-    print(f"""{model} results:
-          ROC-AUC Score: {result["roc-auc score"]:0.4f}
-          Accuracy: {result["accuracy"]:0.4f}
-          Classification Report: {result["classification_report"]}
-          """)
-    cm_disp.plot(cmap="coolwarm")
-    plt.title(f"Confusion Matrix using {model}")
-    plt.savefig(Path(visualization_path) / f"cm_plot_{model}")
+show_results(results, save_fig=True, save_dir=visualization_path)
